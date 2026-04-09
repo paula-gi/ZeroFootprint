@@ -34,4 +34,29 @@ public class ActivityController {
     public double getTotalCo2() {
         return footprintService.calculateTotalCo2(activityService.getAll());
     }
+
+    @GetMapping("/{id}")
+    public Activity getById(@PathVariable Long id) {
+        return activityService.getById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        activityService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public Activity update(@PathVariable Long id, @RequestBody Activity activity) {
+        Activity existing = activityService.getById(id);
+
+        if (existing == null) {
+            return null; 
+    }
+
+        existing.setName(activity.getName());
+        existing.setAmount(activity.getAmount());
+        existing.setCo2PerUnit(activity.getCo2PerUnit());
+
+        return activityService.save(existing);
+    }
 }

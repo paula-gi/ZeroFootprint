@@ -22,4 +22,12 @@ public class ActivityService {
     public Activity save(Activity activity) {
         return repository.save(activity);
     }
+
+    public Activity getById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void delete(Long id) {
+    repository.deleteById(id);
+    }
 }
