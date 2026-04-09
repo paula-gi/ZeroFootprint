@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class FootprintService {
 
-    public double calculateFootprint(List<Activity> activities){
+    public double calculateTotalCo2(List<Activity> activities) {
         return activities.stream()
                 .mapToDouble(a -> a.getAmount() * a.getCo2PerUnit())
                 .sum();
