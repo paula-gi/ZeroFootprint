@@ -3,6 +3,8 @@ package com.zerofootprint.backend.controller;
 import com.zerofootprint.backend.model.Activity;
 import com.zerofootprint.backend.service.ActivityService;
 import com.zerofootprint.backend.service.FootprintService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,9 +28,10 @@ public class ActivityController {
     }
 
     @PostMapping
-    public Activity create(@RequestBody Activity activity) {
-        return activityService.save(activity);
-    }
+public ResponseEntity<Activity> create(@RequestBody Activity activity) {
+    Activity saved = activityService.save(activity);
+    return ResponseEntity.status(201).body(saved);
+}
 
     @GetMapping("/total-co2")
     public double getTotalCo2() {
@@ -36,27 +39,42 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public Activity getById(@PathVariable Long id) {
-        return activityService.getById(id);
+    public ResponseEntity<Activity> getById(@PathVariable Long id) {
+        Activity activity = activityService.getById(id);
+
+        if (activity == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(activity);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        activityService.delete(id);
+public ResponseEntity<Void> delete(@PathVariable Long id) {
+    Activity activity = activityService.getById(id);
+
+    if (activity == null) {
+        return ResponseEntity.notFound().build();
     }
+
+    activityService.delete(id);
+    return ResponseEntity.noContent().build();
+}
 
     @PutMapping("/{id}")
-    public Activity update(@PathVariable Long id, @RequestBody Activity activity) {
-        Activity existing = activityService.getById(id);
+public ResponseEntity<Activity> update(@PathVariable Long id, @RequestBody Activity activity) {
+    Activity existing = activityService.getById(id);
 
-        if (existing == null) {
-            return null; 
+    if (existing == null) {
+        return ResponseEntity.notFound().build();
     }
 
-        existing.setName(activity.getName());
-        existing.setAmount(activity.getAmount());
-        existing.setCo2PerUnit(activity.getCo2PerUnit());
+    existing.setName(activity.getName());
+    existing.setAmount(activity.getAmount());
+    existing.setCo2PerUnit(activity.getCo2PerUnit());
 
-        return activityService.save(existing);
-    }
+    Activity updated = activityService.save(existing);
+
+    return ResponseEntity.ok(updated);
+}
 }
