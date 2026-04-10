@@ -26,8 +26,17 @@ public class ActivityController {
     }
 
     @GetMapping
-    public List<Activity> getAll() {
-        return activityService.getAll();
+    public List<ActivityResponseDTO> getAll() {
+        return activityService.getAll()
+                .stream()
+                .map(activity -> {
+                    ActivityResponseDTO dto = new ActivityResponseDTO();
+                    dto.id = activity.getId();
+                    dto.name = activity.getName();
+                    dto.totalCo2 = activity.getTotalCo2();
+                    return dto;
+                })
+                .toList();
     }
 
    @PostMapping
