@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import com.zerofootprint.backend.dto.ActivityRequestDTO;
+import com.zerofootprint.backend.dto.ActivityResponseDTO;
+
 @RestController
 @RequestMapping("/api/activities")
 @CrossOrigin(origins = "*")
@@ -27,11 +30,23 @@ public class ActivityController {
         return activityService.getAll();
     }
 
-    @PostMapping
-public ResponseEntity<Activity> create(@RequestBody Activity activity) {
-    Activity saved = activityService.save(activity);
-    return ResponseEntity.status(201).body(saved);
-}
+   @PostMapping
+    public ResponseEntity<ActivityResponseDTO> create(@RequestBody ActivityRequestDTO dto) {
+
+        Activity activity = new Activity();
+        activity.setName(dto.name);
+        activity.setAmount(dto.amount);
+        activity.setCo2PerUnit(dto.co2PerUnit);
+
+        Activity saved = activityService.save(activity);
+
+        ActivityResponseDTO response = new ActivityResponseDTO();
+        response.id = saved.getId();
+        response.name = saved.getName();
+        response.totalCo2 = saved.getTotalCo2();
+
+            return ResponseEntity.status(201).body(response);
+    }
 
     @GetMapping("/total-co2")
     public double getTotalCo2() {
@@ -50,31 +65,31 @@ public ResponseEntity<Activity> create(@RequestBody Activity activity) {
     }
 
     @DeleteMapping("/{id}")
-public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
     Activity activity = activityService.getById(id);
 
-    if (activity == null) {
-        return ResponseEntity.notFound().build();
-    }
+        if (activity == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-    activityService.delete(id);
-    return ResponseEntity.noContent().build();
-}
+        activityService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PutMapping("/{id}")
-public ResponseEntity<Activity> update(@PathVariable Long id, @RequestBody Activity activity) {
-    Activity existing = activityService.getById(id);
+    public ResponseEntity<Activity> update(@PathVariable Long id, @RequestBody Activity activity) {
+        Activity existing = activityService.getById(id);
 
-    if (existing == null) {
-        return ResponseEntity.notFound().build();
+        if (existing == null) {
+            return ResponseEntity.notFound().build();
     }
 
-    existing.setName(activity.getName());
-    existing.setAmount(activity.getAmount());
-    existing.setCo2PerUnit(activity.getCo2PerUnit());
+        existing.setName(activity.getName());
+        existing.setAmount(activity.getAmount());
+        existing.setCo2PerUnit(activity.getCo2PerUnit());
 
-    Activity updated = activityService.save(existing);
+        Activity updated = activityService.save(existing);
 
-    return ResponseEntity.ok(updated);
-}
+        return ResponseEntity.ok(updated);
+    }
 }
