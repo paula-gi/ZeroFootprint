@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.zerofootprint.backend.dto.ActivityRequestDTO;
 import com.zerofootprint.backend.dto.ActivityResponseDTO;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -40,7 +41,7 @@ public class ActivityController {
     }
 
    @PostMapping
-    public ResponseEntity<ActivityResponseDTO> create(@RequestBody ActivityRequestDTO dto) {
+    public ResponseEntity<ActivityResponseDTO> create(@Valid @RequestBody ActivityRequestDTO dto) {
 
         Activity activity = new Activity();
         activity.setName(dto.name);
