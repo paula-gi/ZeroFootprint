@@ -30,4 +30,8 @@ public class ActivityService {
     public void delete(Long id) {
     repository.deleteById(id);
     }
+
+    public List<Activity> searchByName(String name) {
+    return repository.findByNameContainingIgnoreCase(name);
+    }
 }
