@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class ActivityService {
 
@@ -33,5 +36,9 @@ public class ActivityService {
 
     public List<Activity> searchByName(String name) {
     return repository.findByNameContainingIgnoreCase(name);
+    }
+
+    public Page<Activity> getAll(Pageable pageable) {
+    return repository.findAll(pageable);
     }
 }

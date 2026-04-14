@@ -7,11 +7,11 @@ import com.zerofootprint.backend.service.FootprintService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import com.zerofootprint.backend.dto.ActivityRequestDTO;
 import com.zerofootprint.backend.dto.ActivityResponseDTO;
 import jakarta.validation.Valid;
+
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -27,13 +27,19 @@ public class ActivityController {
     }
 
     @GetMapping
-    public List<Activity> getAll(@RequestParam(required = false) String name) {
+    public ResponseEntity<?> getAll(
+            @RequestParam(required = false) String name,
+            Pageable pageable) {
 
         if (name != null && !name.isEmpty()) {
-            return activityService.searchByName(name);
+            return ResponseEntity.ok(
+                    activityService.searchByName(name)
+            );
         }
 
-        return activityService.getAll();
+        return ResponseEntity.ok(
+                activityService.getAll(pageable)
+        );
     }
 
    @PostMapping
