@@ -34,8 +34,8 @@ public class ActivityService {
     repository.deleteById(id);
     }
 
-    public List<Activity> searchByName(String name) {
-    return repository.findByNameContainingIgnoreCase(name);
+    public Page<Activity> searchByName(String name, Pageable pageable) {
+    return repository.findByNameContainingIgnoreCase(name, pageable);
     }
 
     public Page<Activity> getAll(Pageable pageable) {

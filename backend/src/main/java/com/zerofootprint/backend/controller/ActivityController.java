@@ -33,7 +33,7 @@ public class ActivityController {
 
         if (name != null && !name.isEmpty()) {
             return ResponseEntity.ok(
-                    activityService.searchByName(name)
+                    activityService.searchByName(name, pageable)
             );
         }
 

@@ -2,9 +2,12 @@ package com.zerofootprint.backend.repository;
 
 import com.zerofootprint.backend.model.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    List<Activity> findByNameContainingIgnoreCase(String name);
+    Page<Activity> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
