@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "activities")
 public class Activity {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private Long id;
-
+    private User user;
     private String name;
     private double amount;
     private double co2PerUnit;
@@ -56,5 +58,13 @@ public class Activity {
 
     public void setCo2PerUnit(double co2PerUnit) {
         this.co2PerUnit = co2PerUnit;
+    }
+
+    public User getUser() {
+    return user;
+    }
+
+    public void setUser(User user) {
+    this.user = user;
     }
 }
