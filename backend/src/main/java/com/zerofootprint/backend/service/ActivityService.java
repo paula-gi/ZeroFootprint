@@ -41,4 +41,8 @@ public class ActivityService {
     public Page<Activity> getAll(Pageable pageable) {
     return repository.findAll(pageable);
     }
+
+    public List<Activity> getByUserId(Long userId) {
+    return repository.findByUserId(userId);
+}
 }
