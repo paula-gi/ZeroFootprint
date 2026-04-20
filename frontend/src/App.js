@@ -1,11 +1,7 @@
-import ActivityList from "./components/ActivityList";
+import Home from "./pages/Home";
 
 function App() {
-  return (
-    <div>
-      <ActivityList />
-    </div>
-  );
+  return <Home />;
 }
 
 export default App;
