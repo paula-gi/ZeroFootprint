@@ -1,10 +1,42 @@
 import { useState } from "react";
+import { createUser, createActivity } from "../api/users";
 
 export default function Home() {
   const [step, setStep] = useState(1);
   const [carKm, setCarKm] = useState(0);
+  const [userId, setUserId] = useState(null);
+  const [co2, setCo2] = useState(null);
 
-  const next = () => setStep(step + 1);
+  const next = async () => {
+    try {
+      // 🔹 1. crear usuario si no existe
+      let id = userId;
+
+      if (!id) {
+        const userRes = await createUser({
+          name: "Usuario",
+          email: "test@test.com",
+        });
+
+        id = userRes.data.id;
+        setUserId(id);
+      }
+
+      // 🔹 2. crear actividad
+      const activityRes = await createActivity(id, {
+        name: "car",
+        amount: carKm,
+        co2PerUnit: 0.2,
+      });
+
+      // 🔹 3. guardar resultado
+      setCo2(activityRes.data.totalCo2);
+
+      setStep(2);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div>
@@ -18,14 +50,14 @@ export default function Home() {
             value={carKm}
             onChange={(e) => setCarKm(e.target.value)}
           />
-          <button onClick={next}>Siguiente</button>
+          <button onClick={next}>Calcular</button>
         </div>
       )}
 
       {step === 2 && (
         <div>
-          <p>Resultado provisional:</p>
-          <p>CO2: {carKm * 0.2}</p>
+          <h2>Resultado</h2>
+          <p>Tu huella de CO2 es: {co2}</p>
         </div>
       )}
     </div>
