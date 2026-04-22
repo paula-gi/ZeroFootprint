@@ -58,18 +58,28 @@ export default function Home() {
 };
 
   return (
-    <div>
-      <h1>Calcula tu huella 🌍</h1>
+    <div className="container">
+      <div className="card">
+        <h1>🌍 Tu huella</h1>
+
+      <div className="progress">
+        <div 
+          className="progress-bar"
+          style={{ width: `${(step / 4) * 100}%` }}
+        ></div>
+      </div>
 
         {step === 1 && (
             <div>
                 <p>¿Cuántos km haces en coche al mes?</p>
                 <input
+                    className="input"
                     type="number"
+                    placeholder="Ej: 100"
                     value={carKm}
                     onChange={(e) => setCarKm(e.target.value)}
                 />
-                <button onClick={() => setStep(2)}>Siguiente</button>
+                <button className="btn" onClick={() => setStep(2)}>Siguiente</button>
             </div>
         )}
 
@@ -77,11 +87,13 @@ export default function Home() {
             <div>
                 <p>¿Cuánta carne consumes por semana?</p>
                 <input
+                    className="input"
                     type="number"
+                    placeholder="Ej: 2"
                     value={food}
                     onChange={(e) => setFood(e.target.value)}
                 />
-                <button onClick={() => setStep(3)}>Siguiente</button>
+                <button className="btn" onClick={() => setStep(3)}>Siguiente</button>
             </div>
         )}
 
@@ -89,11 +101,13 @@ export default function Home() {
             <div>
                 <p>¿Consumo energético mensual?</p>
                 <input
+                    className="input"
                     type="number"
+                    placeholder="Ej: 150"
                     value={energy}
                     onChange={(e) => setEnergy(e.target.value)}
                 />
-                <button onClick={calculate}>Calcular</button>
+                <button className="btn" onClick={calculate}>Calcular</button>
             </div>
         )}
 
@@ -104,6 +118,6 @@ export default function Home() {
             </div>
         )}
         </div>
-        
+      </div>
   );
 }
