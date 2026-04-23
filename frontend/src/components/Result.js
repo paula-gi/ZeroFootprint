@@ -24,6 +24,26 @@ export default function Result({ userId }) {
     }
   }, [load, userId]);
 
+  const getRecommendations = () => {
+  const tips = [];
+
+  activities.forEach((a) => {
+    if (a.name === "car" && a.totalCo2 > 50) {
+      tips.push("🚗 Reduce el uso del coche o usa transporte público");
+    }
+
+    if (a.name === "food" && a.totalCo2 > 30) {
+      tips.push("🍔 Reduce el consumo de carne");
+    }
+
+    if (a.name === "energy" && a.totalCo2 > 40) {
+      tips.push("💡 Reduce el consumo eléctrico en casa");
+    }
+  });
+
+  return tips;
+};
+
   return (
     <div>
       <h2>Tu huella total</h2>
@@ -35,6 +55,14 @@ export default function Result({ userId }) {
           <li key={a.id}>
             {a.name} → {a.totalCo2}
           </li>
+        ))}
+      </ul>
+
+      <h3>Recomendaciones:</h3>
+
+      <ul>
+        {getRecommendations().map((tip, i) => (
+            <li key={i}>{tip}</li>
         ))}
       </ul>
     </div>
