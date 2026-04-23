@@ -9,3 +9,7 @@ export const createUser = (user) => {
 export const createActivity = (userId, activity) => {
   return axios.post(`${API_URL}/${userId}/activities`, activity);
 };
+
+export const getUserActivities = (userId) => {
+  return axios.get(`${API_URL}/${userId}/activities`);
+};
