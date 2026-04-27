@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUser, createActivity } from "../api/users";
 import Result from "../components/Result";
 
@@ -10,6 +10,16 @@ export default function Home() {
   const [energy, setEnergy] = useState(0);
 
   const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("userId");
+
+    if (savedUser) {
+      const id = Number(savedUser);
+      setUserId(id);
+      setStep(4);
+    }
+  }, []);
 
   const calculate = async () => {
     try {
@@ -24,6 +34,8 @@ export default function Home() {
 
         id = userRes.data.id;
         setUserId(id);
+
+         localStorage.setItem("userId", id);
       }
 
       // Actividades
