@@ -1,10 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { getUserActivities } from "../api/users";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import axios from "axios"; 
 
 export default function Result({ userId }) {
   const [activities, setActivities] = useState([]);
   const [total, setTotal] = useState(0);
+  
+  const [history, setHistory] = useState([]);
 
   const load = useCallback(async () => {
     try {
@@ -19,31 +22,40 @@ export default function Result({ userId }) {
     }
   }, [userId]);
 
+  
+  const loadHistory = useCallback(async () => {
+  const res = await axios.get(
+    `http://localhost:8080/api/users/${userId}/carbon-records`
+  );
+  setHistory(res.data);
+}, [userId]);
+
   useEffect(() => {
-    if (userId) {
-      load();
-    }
-  }, [load, userId]);
+  if (userId) {
+    load();
+    loadHistory(); 
+  }
+}, [load, loadHistory, userId]);
 
   const getRecommendations = () => {
-  const tips = [];
+    const tips = [];
 
-  activities.forEach((a) => {
-    if (a.name === "car" && a.totalCo2 > 50) {
-      tips.push("🚗 Reduce el uso del coche o usa transporte público");
-    }
+    activities.forEach((a) => {
+      if (a.name === "car" && a.totalCo2 > 50) {
+        tips.push("🚗 Reduce el uso del coche o usa transporte público");
+      }
 
-    if (a.name === "food" && a.totalCo2 > 30) {
-      tips.push("🍔 Reduce el consumo de carne");
-    }
+      if (a.name === "food" && a.totalCo2 > 30) {
+        tips.push("🍔 Reduce el consumo de carne");
+      }
 
-    if (a.name === "energy" && a.totalCo2 > 40) {
-      tips.push("💡 Reduce el consumo eléctrico en casa");
-    }
-  });
+      if (a.name === "energy" && a.totalCo2 > 40) {
+        tips.push("💡 Reduce el consumo eléctrico en casa");
+      }
+    });
 
-  return tips;
-};
+    return tips;
+  };
 
   const getScore = () => {
     if (total < 50) return "BAJA 🟢";
@@ -51,7 +63,7 @@ export default function Result({ userId }) {
     return "ALTA 🔴";
   };
 
-    const chartData = activities.map((a) => ({
+  const chartData = activities.map((a) => ({
     name: a.name,
     value: a.totalCo2,
   }));
@@ -64,7 +76,6 @@ export default function Result({ userId }) {
       <h3>Tu nivel:</h3>
       <p>{getScore()}</p>
 
-      
       <h3>Detalle:</h3>
       <ul>
         {activities.map((a) => (
@@ -73,7 +84,7 @@ export default function Result({ userId }) {
           </li>
         ))}
       </ul>
-      
+
       <h3>Gráfico:</h3>
       <PieChart width={300} height={300}>
         <Pie
@@ -88,17 +99,24 @@ export default function Result({ userId }) {
         </Pie>
         <Tooltip />
       </PieChart>
-    
-      <h3>Recomendaciones:</h3>
 
+      <h3>Recomendaciones:</h3>
       <ul>
         {getRecommendations().map((tip, i) => (
-            <li key={i}>{tip}</li>
+          <li key={i}>{tip}</li>
+        ))}
+      </ul>
+
+      <h3>Evolución</h3>
+      <ul>
+        {history.map((h, i) => (
+          <li key={i}>
+            {h.date} → {h.totalCo2} kg CO₂
+          </li>
         ))}
       </ul>
     </div>
   );
-  
 }
 
 

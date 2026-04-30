@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createUser, createActivity } from "../api/users";
 import Result from "../components/Result";
+import axios from "axios";
 
 export default function Home() {
   const [step, setStep] = useState(1);
@@ -10,6 +11,7 @@ export default function Home() {
   const [energy, setEnergy] = useState(0);
 
   const [userId, setUserId] = useState(null);
+  const total = carKm + energy + food;
 
   useEffect(() => {
     const savedUser = localStorage.getItem("userId");
@@ -22,47 +24,56 @@ export default function Home() {
   }, []);
 
   const calculate = async () => {
-    try {
-      let id = userId;
+  try {
+    let id = userId;
 
-      // Crear usuario solo si no existe
-      if (!id) {
-        const userRes = await createUser({
-          name: "Usuario",
-          email: "test@test.com",
-        });
-
-        id = userRes.data.id;
-        setUserId(id);
-
-         localStorage.setItem("userId", id);
-      }
-
-      // Actividades
-      await createActivity(id, {
-        name: "car",
-        amount: carKm,
-        co2PerUnit: 0.2,
+    // Crear usuario si no existe
+    if (!id) {
+      const userRes = await createUser({
+        name: "Usuario",
+        email: "test@test.com",
       });
 
-      await createActivity(id, {
-        name: "food",
-        amount: food,
-        co2PerUnit: 1.5,
-      });
-
-      await createActivity(id, {
-        name: "energy",
-        amount: energy,
-        co2PerUnit: 0.5,
-      });
-
-      // ir a resultado
-      setStep(4);
-    } catch (error) {
-      console.error(error);
+      id = userRes.data.id;
+      setUserId(id);
+      localStorage.setItem("userId", id);
     }
-  };
+
+    // Actividades
+    await createActivity(id, {
+      name: "car",
+      amount: carKm,
+      co2PerUnit: 0.2,
+    });
+
+    await createActivity(id, {
+      name: "food",
+      amount: food,
+      co2PerUnit: 1.5,
+    });
+
+    await createActivity(id, {
+      name: "energy",
+      amount: energy,
+      co2PerUnit: 0.5,
+    });
+
+    // ✅ GUARDAR RECORD (AQUÍ, usando id)
+    await axios.post(
+      `http://localhost:8080/api/users/${id}/carbon-record`,
+      {
+        totalCo2: total,
+        date: new Date(),
+      }
+    );
+
+    // ir a resultado
+    setStep(4);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="container">
