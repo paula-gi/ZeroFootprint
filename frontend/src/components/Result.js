@@ -69,23 +69,21 @@ export default function Result({ userId }) {
   }));
 
   return (
-    <div>
+    <div className="dashboard">
+    <div className="card">
       <h2>Tu huella total</h2>
       <p>{total} kg CO2</p>
+    </div>
 
+    <div className="card">
       <h3>Tu nivel:</h3>
       <p>{getScore()}</p>
+    </div>
+  
 
-      <h3>Detalle:</h3>
-      <ul>
-        {activities.map((a) => (
-          <li key={a.id}>
-            {a.name} → {a.totalCo2}
-          </li>
-        ))}
-      </ul>
+    <div className="card full">
+      <h3>Distribución</h3>
 
-      <h3>Gráfico:</h3>
       <PieChart width={300} height={300}>
         <Pie
           data={chartData}
@@ -94,19 +92,34 @@ export default function Result({ userId }) {
           outerRadius={100}
         >
           {chartData.map((entry, index) => (
-            <Cell key={index} />
-          ))}
-        </Pie>
-        <Tooltip />
+          <Cell key={index} />
+        ))}
+      </Pie>
+      <Tooltip />
       </PieChart>
+    </div>
 
+    <div className="card">
+      <h3>Detalle:</h3>
+      <ul>
+        {activities.map((a) => (
+          <li key={a.id}>
+            {a.name} → {a.totalCo2}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div className="card">
       <h3>Recomendaciones:</h3>
       <ul>
         {getRecommendations().map((tip, i) => (
           <li key={i}>{tip}</li>
         ))}
       </ul>
+    </div>
 
+    <div className="card full">
       <h3>Evolución</h3>
       <ul>
         {history.map((h, i) => (
@@ -115,6 +128,7 @@ export default function Result({ userId }) {
           </li>
         ))}
       </ul>
+    </div>
     </div>
   );
 }
