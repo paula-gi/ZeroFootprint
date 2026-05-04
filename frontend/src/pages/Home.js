@@ -57,8 +57,7 @@ export default function Home() {
       amount: energy,
       co2PerUnit: 0.5,
     });
-
-    // ✅ GUARDAR RECORD (AQUÍ, usando id)
+    
     await axios.post(
       `http://localhost:8080/api/users/${id}/carbon-record`,
       {
@@ -73,6 +72,14 @@ export default function Home() {
   } catch (error) {
     console.error(error);
   }
+};
+
+  const handleRestart = () => {
+  setStep(1);
+
+  setCarKm(0);
+  setFood(0);
+  setEnergy(0);
 };
 
   return (
@@ -132,8 +139,11 @@ export default function Home() {
           </div>
         )}
 
-        {step === 4 && <Result userId={userId} />}
+        {step === 4 && (
+          
+        <Result userId={userId} onRestart={handleRestart} />
+        )}
+        </div>
       </div>
-    </div>
   );
 }

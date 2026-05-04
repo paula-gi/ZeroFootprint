@@ -3,7 +3,7 @@ import { getUserActivities } from "../api/users";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import axios from "axios"; 
 
-export default function Result({ userId }) {
+export default function Result({ userId, onRestart }) {
   const [activities, setActivities] = useState([]);
   const [total, setTotal] = useState(0);
   
@@ -68,6 +68,7 @@ export default function Result({ userId }) {
     value: a.totalCo2,
   }));
 
+  
   return (
     <div className="dashboard">
     <div className="card">
@@ -129,6 +130,10 @@ export default function Result({ userId }) {
         ))}
       </ul>
     </div>
+
+    <button className="btn" onClick={onRestart}>
+  Nuevo cálculo
+</button>
     </div>
   );
 }
