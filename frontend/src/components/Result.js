@@ -68,6 +68,38 @@ export default function Result({ userId, onRestart }) {
     value: a.totalCo2,
   }));
 
+  const getComparison = () => {
+  if (history.length < 2) return null;
+
+  const latest = history[history.length - 1];
+  const previous = history[history.length - 2];
+
+  const diff = latest.totalCo2 - previous.totalCo2;
+  const percent = ((diff / previous.totalCo2) * 100).toFixed(1);
+
+  return { diff, percent };
+};
+
+  const renderComparison = () => {
+  const data = getComparison();
+
+  if (!data) return <p>No hay datos anteriores</p>;
+
+  if (data.diff < 0) {
+    return <p style={{ color: "green" }}>
+      📉 Has reducido tu huella un {Math.abs(data.percent)}%
+    </p>;
+  }
+
+  if (data.diff > 0) {
+    return <p style={{ color: "red" }}>
+      📈 Tu huella ha aumentado un {data.percent}%
+    </p>;
+  }
+
+  return <p>➖ Tu huella se mantiene igual</p>;
+};
+
   
   return (
     <div className="dashboard">
@@ -76,11 +108,15 @@ export default function Result({ userId, onRestart }) {
       <p>{total} kg CO2</p>
     </div>
 
+    <div className="card full">
+    <h3>Comparación</h3>
+    {renderComparison()}
+    </div>
+
     <div className="card">
       <h3>Tu nivel:</h3>
       <p>{getScore()}</p>
-    </div>
-  
+    </div>  
 
     <div className="card full">
       <h3>Distribución</h3>
