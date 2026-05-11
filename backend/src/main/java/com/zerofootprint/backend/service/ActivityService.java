@@ -4,7 +4,9 @@ import com.zerofootprint.backend.model.Activity;
 import com.zerofootprint.backend.repository.ActivityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,5 +46,20 @@ public class ActivityService {
 
     public List<Activity> getByUserId(Long userId) {
     return repository.findByUserId(userId);
-}
+    }
+
+    public Map<String, Double> getSummary(Long userId) {
+
+    List<Object[]> results = repository.getCarbonSummaryByUserId(userId);
+
+    Map<String, Double> summary = new HashMap<>();
+
+    for (Object[] row : results) {
+        String name = (String) row[0];
+        Double total = (Double) row[1];
+        summary.put(name, total);
+    }
+
+    return summary;
+    }
 }

@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/activities")
 @CrossOrigin(origins = "*")
@@ -103,5 +105,10 @@ public class ActivityController {
         Activity updated = activityService.save(existing);
 
         return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping("/users/{userId}/summary")
+    public Map<String, Double> getSummary(@PathVariable Long userId) {
+        return activityService.getSummary(userId);
     }
 }
