@@ -1,9 +1,6 @@
 package com.zerofootprint.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -14,10 +11,16 @@ public class CarbonRecord {
     private Long id;
 
     private Long userId;
+
     private Double totalCo2;
+
     private LocalDate date;
 
-    // Getters y Setters
+    public CarbonRecord() {}
+
+    public Long getId() {
+        return id;
+    }
 
     public Long getUserId() {
         return userId;
