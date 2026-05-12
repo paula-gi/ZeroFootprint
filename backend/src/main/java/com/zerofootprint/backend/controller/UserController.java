@@ -25,6 +25,8 @@ public class UserController {
         this.activityService = activityService;
     }
 
+    // Users
+
     @GetMapping
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -34,6 +36,8 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         return userRepository.save(user);
     }
+
+    // Activities
 
     @GetMapping("/{userId}/activities")
     public List<Activity> getUserActivities(@PathVariable Long userId) {

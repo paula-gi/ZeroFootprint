@@ -1,6 +1,7 @@
 package com.zerofootprint.backend.service;
 
 import com.zerofootprint.backend.model.CarbonRecord;
+import com.zerofootprint.backend.model.User;
 import com.zerofootprint.backend.repository.CarbonRecordRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class CarbonRecordService {
         return carbonRecordRepository.save(record);
     }
 
-    public List<CarbonRecord> getByUserId(Long userId) {
-        return carbonRecordRepository.findByUserId(userId);
+    public List<CarbonRecord> getByUser(User user) {
+        return carbonRecordRepository.findByUser(user);
     }
 }
