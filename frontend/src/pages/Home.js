@@ -11,76 +11,77 @@ export default function Home() {
   const [energy, setEnergy] = useState(0);
 
   const [userId, setUserId] = useState(null);
-  const total = carKm + energy + food;
+
+  const total = carKm + food + energy;
 
   useEffect(() => {
     const savedUser = localStorage.getItem("userId");
 
     if (savedUser) {
-      const id = Number(savedUser);
-      setUserId(id);
+      setUserId(Number(savedUser));
       setStep(4);
     }
   }, []);
 
   const calculate = async () => {
-  try {
-    let id = userId;
+    try {
+      let id = userId;
 
-    // Crear usuario si no existe
-    if (!id) {
-      const userRes = await createUser({
-        name: "Usuario",
-        email: "test@test.com",
-      });
+      // Crear usuario si no existe
+      if (!id) {
+        const userRes = await createUser({
+          name: "Usuario",
+          email: "test@test.com",
+        });
 
-      id = userRes.data.id;
-      setUserId(id);
-      localStorage.setItem("userId", id);
-    }
-
-    // Actividades
-    await createActivity(id, {
-      name: "car",
-      amount: carKm,
-      co2PerUnit: 0.2,
-    });
-
-    await createActivity(id, {
-      name: "food",
-      amount: food,
-      co2PerUnit: 1.5,
-    });
-
-    await createActivity(id, {
-      name: "energy",
-      amount: energy,
-      co2PerUnit: 0.5,
-    });
-    
-    await axios.post(
-      `http://localhost:8080/api/users/${id}/carbon-record`,
-      {
-        totalCo2: total,
-        date: new Date(),
+        id = userRes.data.id;
+        setUserId(id);
+        localStorage.setItem("userId", id);
       }
-    );
 
-    // ir a resultado
-    setStep(4);
+      // Guardar actividades
+      await Promise.all([
+        createActivity(id, {
+          name: "car",
+          amount: carKm,
+          co2PerUnit: 0.2,
+        }),
+        createActivity(id, {
+          name: "food",
+          amount: food,
+          co2PerUnit: 1.5,
+        }),
+        createActivity(id, {
+          name: "energy",
+          amount: energy,
+          co2PerUnit: 0.5,
+        }),
+      ]);
 
-  } catch (error) {
-    console.error(error);
-  }
-};
+      // Guardar record 
+      await axios.post(
+        `http://localhost:8080/api/users/${id}/carbon-records`,
+        {
+          totalCo2: total,
+          date: new Date().toISOString().split("T")[0],
+        }
+      );
+
+      // Ir a resultados
+      setStep(4);
+
+    } catch (error) {
+      console.error("ERROR CALCULATE:", error.response?.data || error.message);
+      alert("Error al calcular la huella. Revisa backend.");
+    }
+  };
 
   const handleRestart = () => {
-  setStep(1);
-
-  setCarKm(0);
-  setFood(0);
-  setEnergy(0);
-};
+    setStep(1);
+    setCarKm(0);
+    setFood(0);
+    setEnergy(0);
+  };
 
   return (
     <div className="container">
@@ -140,10 +141,9 @@ export default function Home() {
         )}
 
         {step === 4 && (
-          
-        <Result userId={userId} onRestart={handleRestart} />
+          <Result userId={userId} onRestart={handleRestart} />
         )}
-        </div>
       </div>
+    </div>
   );
 }
