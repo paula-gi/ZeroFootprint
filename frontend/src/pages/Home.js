@@ -6,9 +6,9 @@ import axios from "axios";
 export default function Home() {
   const [step, setStep] = useState(1);
 
-  const [carKm, setCarKm] = useState(0);
-  const [food, setFood] = useState(0);
-  const [energy, setEnergy] = useState(0);
+  const [carKm, setCarKm] = useState("");
+  const [food, setFood] = useState("");
+  const [energy, setEnergy] = useState("");
 
   const [userId, setUserId] = useState(null);
 
@@ -43,17 +43,17 @@ export default function Home() {
       await Promise.all([
         createActivity(id, {
           name: "car",
-          amount: carKm,
+          amount: Number(carKm),
           co2PerUnit: 0.2,
         }),
         createActivity(id, {
           name: "food",
-          amount: food,
+          amount: Number(food),
           co2PerUnit: 1.5,
         }),
         createActivity(id, {
           name: "energy",
-          amount: energy,
+          amount: Number(energy),
           co2PerUnit: 0.5,
         }),
       ]);
@@ -102,7 +102,7 @@ export default function Home() {
               className="input"
               type="number"
               value={carKm}
-              onChange={(e) => setCarKm(Number(e.target.value))}
+              onChange={(e) => setCarKm(e.target.value)}
             />
             <button className="btn" onClick={() => setStep(2)}>
               Siguiente
@@ -117,7 +117,7 @@ export default function Home() {
               className="input"
               type="number"
               value={food}
-              onChange={(e) => setFood(Number(e.target.value))}
+              onChange={(e) => setFood(e.target.value)}
             />
             <button className="btn" onClick={() => setStep(3)}>
               Siguiente
@@ -132,7 +132,7 @@ export default function Home() {
               className="input"
               type="number"
               value={energy}
-              onChange={(e) => setEnergy(Number(e.target.value))}
+              onChange={(e) => setEnergy(e.target.value)}
             />
             <button className="btn" onClick={calculate}>
               Calcular

@@ -134,7 +134,7 @@ export default function Result({ userId, onRestart }) {
         <p>{total} kg CO2</p>
       </div>
 
-      <div className="card full">
+      <div className="card">
         <h3>Comparación</h3>
         {renderComparison()}
       </div>
@@ -142,6 +142,16 @@ export default function Result({ userId, onRestart }) {
       <div className="card">
         <h3>Tu nivel:</h3>
         <p>{getScore()}</p>
+      </div>
+
+            <div className="card">
+        <h3>Recomendaciones:</h3>
+
+        <ul>
+          {getRecommendations().map((tip, i) => (
+            <li key={i}>{tip}</li>
+          ))}
+        </ul>
       </div>
 
       <div className="card full">
@@ -176,16 +186,6 @@ export default function Result({ userId, onRestart }) {
       </div>
 
       <div className="card">
-        <h3>Recomendaciones:</h3>
-
-        <ul>
-          {getRecommendations().map((tip, i) => (
-            <li key={i}>{tip}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="card full">
         <h3>Evolución</h3>
 
         <ul>
@@ -197,9 +197,11 @@ export default function Result({ userId, onRestart }) {
         </ul>
       </div>
 
-      <button className="btn" onClick={onRestart}>
-        Nuevo cálculo
-      </button>
+      <div className="restart-container">
+  <button className="btn restart-btn" onClick={onRestart}>
+    Nuevo cálculo
+  </button>
+</div>
 
     </div>
   );
