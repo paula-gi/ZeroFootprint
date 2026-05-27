@@ -81,10 +81,34 @@ export default function Result({ userId, onRestart }) {
     return "ALTA 🔴";
   };
 
+  const getLevelClass = () => {
+  if (total < 50) return "level-low";
+  if (total < 150) return "level-medium";
+  return "level-high";
+  };
+
+  const getComparisonClass = () => {
+  const data = getComparison();
+
+  if (!data) return "";
+
+  if (data.diff < 0) return "comparison-good";
+
+  if (data.diff > 0) return "comparison-bad";
+
+  return "comparison-neutral";
+  };
+
   const chartData = activities.map((a) => ({
     name: a.name,
     value: a.totalCo2,
   }));
+
+  const COLORS = {
+  car: "#3B82F6",
+  food: "#f51616",
+  energy: "#e7f82c",
+  };
 
   const getComparison = () => {
     if (history.length < 2) return null;
@@ -109,7 +133,7 @@ export default function Result({ userId, onRestart }) {
 
     if (data.diff < 0) {
       return (
-        <p style={{ color: "green" }}>
+        <p style={{ color: "white" }}>
           📉 Has reducido tu huella un {Math.abs(data.percent)}%
         </p>
       );
@@ -129,22 +153,22 @@ export default function Result({ userId, onRestart }) {
   return (
     <div className="dashboard">
 
-      <div className="card">
+      <div className="card huella-card">
         <h2>Tu huella total</h2>
         <p>{total} kg CO2</p>
       </div>
 
-      <div className="card">
+      <div className={`card ${getComparisonClass()}`}>
         <h3>Comparación</h3>
         {renderComparison()}
       </div>
 
-      <div className="card">
+      <div className={`card ${getLevelClass()}`}>
         <h3>Tu nivel:</h3>
         <p>{getScore()}</p>
       </div>
 
-            <div className="card">
+      <div className="card recomendaciones-card">
         <h3>Recomendaciones:</h3>
 
         <ul>
@@ -165,7 +189,9 @@ export default function Result({ userId, onRestart }) {
             outerRadius={100}
           >
             {chartData.map((entry, index) => (
-              <Cell key={index} />
+              <Cell key={index}
+              fill={COLORS[entry.name] || "#94A3B8"}
+               />
             ))}
           </Pie>
 
@@ -173,7 +199,7 @@ export default function Result({ userId, onRestart }) {
         </PieChart>
       </div>
 
-      <div className="card">
+      <div className="card detalle-card">
         <h3>Detalle:</h3>
 
         <ul>
@@ -185,7 +211,7 @@ export default function Result({ userId, onRestart }) {
         </ul>
       </div>
 
-      <div className="card">
+      <div className="card evolucion-card">
         <h3>Evolución</h3>
 
         <ul>

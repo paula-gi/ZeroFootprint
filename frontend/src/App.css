@@ -11,7 +11,7 @@
 .card {
   width: 100%;
   max-width: 900px;
-  background: #FFFFFF;
+  background: #e5ebe6;
   padding: 24px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
@@ -22,6 +22,66 @@
 
 .dashboard .card {
   max-width: 100%;  
+}
+
+.huella-card {
+  background: linear-gradient(135deg, #059669, #10B981);
+  color: white;
+  border: none;  
+}
+
+.comparison-good {
+  background: linear-gradient(135deg, #4ec456, #10b924);
+  color: white;
+  border: none;
+}
+
+.comparison-bad {
+  background: linear-gradient(135deg, #EF4444, #991B1B);
+  color: white;
+  border: none;
+}
+
+.comparison-neutral {
+  background: linear-gradient(135deg, #64748B, #334155);
+  color: white;
+  border: none;
+}
+
+.level-low {
+  background: linear-gradient(135deg, #4ec456, #10b924);
+  color: white;
+  border: none;
+}
+
+.level-medium {
+  background: linear-gradient(135deg, #F59E0B, #92400E);
+  color: white;
+  border: none;
+}
+
+.level-high {
+  background: linear-gradient(135deg, #EF4444, #991B1B);
+  color: white;
+  border: none;
+}
+
+.recomendaciones-card {
+  background: #ffffff; 
+  color: rgb(10, 10, 10);
+  border: none;  
+}
+
+.detalle-card {
+  background: #ffffff; 
+  color: rgb(10, 10, 10);
+  border: none;  
+}
+
+.evolucion-card {
+  background: #ffffff; 
+  color: rgb(10, 10, 10);
+  border: none;  
 }
 
 .input {
@@ -129,3 +189,4 @@ h1, h2, h3, p {
   width: auto;
   min-width: 220px;
 }
+
