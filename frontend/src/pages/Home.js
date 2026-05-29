@@ -12,7 +12,7 @@ export default function Home() {
 
   const [userId, setUserId] = useState(null);
 
-  const total = carKm + food + energy;
+  const total = carKm * 0.2 + food * 1.5 + energy * 0.5;
 
   useEffect(() => {
     const savedUser = localStorage.getItem("userId");
@@ -86,7 +86,10 @@ export default function Home() {
   return (
     <div className="container">
       <div className="card">
-        <h1>Tu huella</h1>
+        <h1 className="app-title">ZeroFootprint</h1>
+        <p className="app-subtitle">
+          Calcula tu huella y mejora tu impacto ambiental
+        </p>
 
         <div className="progress">
           <div
@@ -112,7 +115,7 @@ export default function Home() {
 
         {step === 2 && (
           <div>
-            <p>¿Cuánta carne consumes por semana?</p>
+            <p>¿Cuántas veces consumes carne por semana?</p>
             <input
               className="input"
               type="number"
@@ -127,7 +130,7 @@ export default function Home() {
 
         {step === 3 && (
           <div>
-            <p>¿Consumo energético mensual?</p>
+            <p>¿Cuántos kWh de electricidad consumes al mes?</p>
             <input
               className="input"
               type="number"

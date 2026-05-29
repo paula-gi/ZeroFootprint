@@ -48,6 +48,13 @@
   border: none;
 }
 
+.comparison-text {
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
 .level-low {
   background: linear-gradient(135deg, #4ec456, #10b924);
   color: white;
@@ -66,10 +73,24 @@
   border: none;
 }
 
+.level-description {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
 .recomendaciones-card {
   background: #ffffff; 
   color: rgb(10, 10, 10);
   border: none;  
+}
+
+.recomendaciones-card li,
+.detalle-card li,
+.evolucion-card li {
+  color: #243867;
+  font-weight: 500;
 }
 
 .detalle-card {
@@ -109,7 +130,7 @@
   padding: 14px;
   border: none;
   border-radius: 10px;
-  background: #22c55e;
+  background: #4a546b;
   color: white;
   font-size: 16px;
   font-weight: 600;
@@ -118,7 +139,7 @@
 }
 
 .btn:hover {
-  background: #16A34A;
+  background: #2c2f71;
 }
 
 .progress {
@@ -154,7 +175,7 @@ li {
 
 .card ul {
   padding-left: 20px;
-  margin: 0;
+  margin: 0;   
 }
 
 .card li {
@@ -186,7 +207,27 @@ h1, h2, h3, p {
 }
 
 .restart-btn {
-  width: auto;
+  width: fit-content;
   min-width: 220px;
+  padding: 14px 28px;  
 }
 
+.restart-container .btn {
+  width: auto;
+}
+
+.app-title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.app-subtitle {
+  text-align: center;
+  color: #64748B;
+  margin-bottom: 30px;
+  font-size: 16px;
+}

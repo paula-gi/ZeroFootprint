@@ -59,26 +59,30 @@ export default function Result({ userId, onRestart }) {
     const tips = [];
 
     activities.forEach((a) => {
-      if (a.name === "car" && a.totalCo2 > 50) {
-        tips.push("🚗 Reduce el uso del coche o usa transporte público");
+      if (a.name === "car" && a.totalCo2 > 10) {
+        tips.push("Reduce el uso del coche o usa transporte público");
       }
 
-      if (a.name === "food" && a.totalCo2 > 30) {
-        tips.push("🍔 Reduce el consumo de carne");
+      if (a.name === "food" && a.totalCo2 > 10) {
+        tips.push("Reduce el consumo de carne");
       }
 
-      if (a.name === "energy" && a.totalCo2 > 40) {
-        tips.push("💡 Reduce el consumo eléctrico en casa");
+      if (a.name === "energy" && a.totalCo2 > 10) {
+        tips.push("Reduce el consumo eléctrico en casa");
       }
     });
+
+    if (tips.length === 0) {
+      tips.push("¡Buen trabajo! Tus hábitos son bastante sostenibles");
+    }
 
     return tips;
   };
 
   const getScore = () => {
-    if (total < 50) return "BAJA 🟢";
-    if (total < 150) return "MEDIA 🟡";
-    return "ALTA 🔴";
+    if (total < 50) return "BAJO 🟢";
+    if (total < 150) return "MEDIO 🟡";
+    return "ALTO 🔴";
   };
 
   const getLevelClass = () => {
@@ -99,41 +103,60 @@ export default function Result({ userId, onRestart }) {
   return "comparison-neutral";
   };
 
-  const chartData = activities.map((a) => ({
-    name: a.name,
-    value: a.totalCo2,
-  }));
-
   const COLORS = {
   car: "#3B82F6",
   food: "#f51616",
   energy: "#e7f82c",
+  }; 
+
+  const LABELS = {
+  car: "Coche",
+  food: "Alimentación",
+  energy: "Energía",
   };
 
+  const chartData = activities.map((a) => ({
+  name: a.name,
+  label: LABELS[a.name] || a.name,
+  value: a.totalCo2,
+  }));
+  
   const getComparison = () => {
-    if (history.length < 2) return null;
+  if (history.length < 2) return null;
 
-    const latest = history[history.length - 1];
-    const previous = history[history.length - 2];
+  const sortedHistory = [...history].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
 
-    const diff = latest.totalCo2 - previous.totalCo2;
+  const latest = sortedHistory[sortedHistory.length - 1];
+  const previous = sortedHistory[sortedHistory.length - 2];
 
-    const percent = (
-      (diff / previous.totalCo2) *
-      100
-    ).toFixed(1);
+  const latestValue = Number(latest.totalCo2);
+  const previousValue = Number(previous.totalCo2);
 
-    return { diff, percent };
+  const diff = latestValue - previousValue;
+
+  let percent = 0;
+
+  if (previousValue > 0) {
+    percent = ((diff / previousValue) * 100).toFixed(1);
+  }
+
+  return {
+    diff,
+    percent,
   };
+};
 
   const renderComparison = () => {
     const data = getComparison();
 
-    if (!data) return <p>No hay datos anteriores</p>;
+    if (!data) 
+      return <p className= "comparison-text">No hay datos anteriores</p>;
 
     if (data.diff < 0) {
       return (
-        <p style={{ color: "white" }}>
+        <p className="comparison-text">
           📉 Has reducido tu huella un {Math.abs(data.percent)}%
         </p>
       );
@@ -141,13 +164,17 @@ export default function Result({ userId, onRestart }) {
 
     if (data.diff > 0) {
       return (
-        <p style={{ color: "red" }}>
+        <p className="comparison-text">
           📈 Tu huella ha aumentado un {data.percent}%
         </p>
       );
     }
 
-    return <p>➖ Tu huella se mantiene igual</p>;
+    return (
+      <p className="comparison-text">
+        ➖ Tu huella se mantiene igual
+      </p>
+    );
   };
 
   return (
@@ -164,12 +191,13 @@ export default function Result({ userId, onRestart }) {
       </div>
 
       <div className={`card ${getLevelClass()}`}>
-        <h3>Tu nivel:</h3>
+        <h3>Tu nivel</h3>
         <p>{getScore()}</p>
+        
       </div>
 
       <div className="card recomendaciones-card">
-        <h3>Recomendaciones:</h3>
+        <h3>Recomendaciones</h3>
 
         <ul>
           {getRecommendations().map((tip, i) => (
@@ -181,12 +209,12 @@ export default function Result({ userId, onRestart }) {
       <div className="card full">
         <h3>Distribución</h3>
 
-        <PieChart width={300} height={300}>
+        <PieChart width={380} height={380}>
           <Pie
             data={chartData}
             dataKey="value"
-            nameKey="name"
-            outerRadius={100}
+            nameKey="label"
+            outerRadius={130}
           >
             {chartData.map((entry, index) => (
               <Cell key={index}
@@ -200,12 +228,12 @@ export default function Result({ userId, onRestart }) {
       </div>
 
       <div className="card detalle-card">
-        <h3>Detalle:</h3>
+        <h3>Detalle</h3>
 
         <ul>
           {activities.map((a) => (
             <li key={a.id}>
-              {a.name} → {a.totalCo2}
+              {LABELS[a.name] || a.name} → {a.totalCo2} kg CO₂
             </li>
           ))}
         </ul>
@@ -215,7 +243,11 @@ export default function Result({ userId, onRestart }) {
         <h3>Evolución</h3>
 
         <ul>
-          {history.map((h, i) => (
+          {[...history]
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 3)
+            .map((h, i) => (
+              
             <li key={i}>
               {h.date} → {h.totalCo2} kg CO₂
             </li>
@@ -223,11 +255,11 @@ export default function Result({ userId, onRestart }) {
         </ul>
       </div>
 
-      <div className="restart-container">
-  <button className="btn restart-btn" onClick={onRestart}>
-    Nuevo cálculo
-  </button>
-</div>
+      <div className="restart-container full">
+        <button className="btn restart-btn" onClick={onRestart}>
+          Nuevo cálculo
+        </button>
+      </div>
 
     </div>
   );
