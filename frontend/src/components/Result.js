@@ -209,6 +209,8 @@ export default function Result({ userId, onRestart }) {
       <div className="card full">
         <h3>Distribución</h3>
 
+        <div className="chart-container">
+
         <PieChart width={380} height={380}>
           <Pie
             data={chartData}
@@ -226,6 +228,7 @@ export default function Result({ userId, onRestart }) {
           <Tooltip />
         </PieChart>
       </div>
+    </div>
 
       <div className="card detalle-card">
         <h3>Detalle</h3>
