@@ -49,15 +49,6 @@ public class UserController {
             @PathVariable Long userId,
             @RequestBody Activity activity
     ) {
-
-        User user = userRepository.findById(userId).orElse(null);
-
-        if (user == null) {
-            return null;
-        }
-
-        activity.setUser(user);
-
-        return activityService.save(activity);
+        return activityService.createActivity(userId, activity);
     }
 }
