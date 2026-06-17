@@ -2,7 +2,6 @@
 
 ZeroFootprint is a full-stack web application that helps users calculate, visualize, and track their carbon footprint based on everyday activities.
 
-The project was built to improve my skills in Java, Spring Boot, React, and full-stack development while applying software engineering best practices.
 
 ---
 
@@ -101,5 +100,3 @@ The application will be available at:
 http://localhost:3000
 ```
 
-
-Full-stack development project built with Java, Spring Boot, React, and MySQL as part of my continuous learning journey in software development.
